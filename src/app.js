@@ -1,41 +1,38 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
-const cors = require('cors')
+import createError from 'http-errors';
+import express, { json, urlencoded } from 'express';
+import { join } from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import cors from 'cors';
 require('dotenv').config();
 
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
+import indexRouter from '../routes/index';
+import usersRouter from '../routes/users';
 
-let notes = require('./routes/notes');
+import { save, view, dodestroy } from '../controller/notes';
 
 let app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(cors());
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(json());
+app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(join(__dirname, 'public'));
 
 app.use('/', indexRouter);
-//app.use('/users', usersRouter);
-
-//app.use('/noteadd', notes.add);
-app.post('/notesave', notes.save);
-app.use('/noteview', notes.view);
-//app.use('/noteedit', notes.edit);
-//app.use('/notedestroy', notes.destroy);
-app.post('/notedodestroy', notes.dodestroy);
 
 
-app.use(function(req, res, next) {
+app.post('/api/note', save);
+app.get('/api/note', view);
+app.delete('/api/note', dodestroy);
+
+
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "YOUR-DOMAIN.TLD"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -61,4 +58,4 @@ app.use(function (err, req, res, next) {
   //res.render('error');
 });
 
-module.exports = app;
+export default app;
