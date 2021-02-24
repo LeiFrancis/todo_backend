@@ -1,38 +1,41 @@
-import { create, update, read, destroy } from '../service/note_ser';
-export function add(req, res, next) {
-    return res.status(200).json();
+import { create, update, read, destroy, keys } from '../service/note_ser';
+
+export let add = (req, res, next) => {
+    res.status(200).json();
 }
-export function save(req, res, next) {
+
+export let save = (req, res, next) => {
     if (req.body.docreate === 'create') {
         create(req.body.notekey,
             req.body.title,
             req.body.body);
-        setTimeout(function () {
+        setTimeout( () => {
             return res.status(200).json({ message: 'Create' });
         }, 500);
     } else {
         update(req.body.id, req.body.notekey,
             req.body.title,
             req.body.body);
-        setTimeout(function () {
+        setTimeout( () => {
             return res.status(200).json({ message: 'Update' });
         }, 500);
     }
 
 }
-export function view(req, res, next) {
-    let note = undefined;
+export let view = (req, res, next) => {
     if (req.query.id) {
-        read(req.query.id).then(function (val) {
+        read(req.query.id).then( (val) => {
             return res.status(200).json(val);
         });
     }
     else {
-        return res.status(200).json(note);
+        keys().then( (val) => {
+            return res.status(200).json(val);
+        })
     }
 
 }
-export function dodestroy(req, res, next) {
+export let dodestroy = (req, res, next) => {
     destroy(req.body.id);
     setTimeout(() => {
         return res.status(200).json({ message: 'Delete' });

@@ -6,10 +6,10 @@ import logger from 'morgan';
 import cors from 'cors';
 require('dotenv').config();
 
-import indexRouter from '../routes/index';
-import usersRouter from '../routes/users';
+import indexRouter from './routes/index';
 
-import { save, view, dodestroy } from '../controller/notes';
+
+import { save, view, dodestroy } from './controller/notes';
 
 let app = express();
 
@@ -22,7 +22,7 @@ app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(join(__dirname, 'public'));
+//app.use(join(__dirname, 'public'));
 
 app.use('/', indexRouter);
 
@@ -32,7 +32,7 @@ app.get('/api/note', view);
 app.delete('/api/note', dodestroy);
 
 
-app.use(function (req, res, next) {
+app.use( (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "YOUR-DOMAIN.TLD"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -43,12 +43,12 @@ app.use(function (req, res, next) {
 
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use( (req, res, next)=> {
   next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) =>{
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -57,5 +57,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   //res.render('error');
 });
+
+let server = require('http').createServer(app);
+server.listen(3030);
 
 export default app;

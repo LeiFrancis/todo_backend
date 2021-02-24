@@ -1,62 +1,77 @@
-import { note } from "../models/notes";
+import Note, { sequelize } from "../models/notes";
 
+let note = Note.init(sequelize);
 
-export function create(keya, titleb, bodyc) {
-    var result = note.build({
-        key: keya,
-        title: titleb,
-        body: bodyc
+export let create = (keya, titleb, bodyc) => {
+  let result = note.build({
+    key: keya,
+    title: titleb,
+    body: bodyc
+  });
+  result
+    .save()
+    .then(res => {
+      return res;
+    })
+    .catch(function(err) {
+      console.log(err);
     });
-    result.save().then(function (res) {
-        return res;
-    }).catch(function (err) {
+};
 
+export let update = (id1, key2, title3, body4) => {
+  note
+    .update({ key: key2, title: title3, body: body4 }, { where: { id: id1 } })
+    .then(res => {
+      return res;
     });
-}
+};
 
-export function update(id1, key2, title3, body4) {
-
-
-    note.update({ key: key2, title: title3, body: body4 }, { where: { id: id1 } }).then(res => {
-
+export let read = id => {
+  let result = note
+    .findAll({ where: { id: id } })
+    .then(res => {
+      return res;
+    })
+    .catch(err => {
+      console.log(err);
     });
+  return result;
+};
 
-}
-
-export function read(id) {
-
-    var result = note.findAll({ where: { id: id } }).then(function (res) {
-        return res;
-    }).catch(function (err) {
-        console.log(err);
+export let keys = () => {
+  let result = note
+    .findAll()
+    .then(res => {
+      return res;
     })
-    return result;
+    .catch(err => {
+      console.log(err);
+    });
+  return result;
+};
 
-}
-
-export function keys() {
-    var result = note.findAll().then(function (res) {
-        return res;
-    }).catch(function (err) {
-        console.log(err);
+export let id = (key, title, body) => {
+  let result = note
+    .findAll({
+      where: { key: key, title: title, body: body },
+      attributes: ["id"]
     })
-    return result;
-
-}
-
-export function id(key, title, body) {
-    var result = note.findAll({ where: { key: key, title: title, body: body }, attributes: ['id'] }).then(function (res) {
-        return res;
-    }).catch(function (err) {
-        console.log(err);
+    .then(res => {
+      return res;
     })
-    return result;
-}
+    .catch(err => {
+      console.log(err);
+    });
+  return result;
+};
 
-export function destroy(id) {
-    note.destroy({ where: { id: id } }).then(function (res) {
-        return res;
-    }).catch(function (err) {
-        console.log(err);
+export let destroy = id => {
+  note
+    .destroy({ where: { id: id } })
+    .then(res => {
+      return res;
     })
-}
+    .catch(function(err) {
+      console.log(err);
+    });
+};

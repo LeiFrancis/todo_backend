@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon  ./bin/www",
-    "build": "babel src -d build"
+    "start": "nodemon --exec babel-node ./src/app.js",
+    "build": "babel src -d build",
+    "start_babel": "babel-node --presets env ./src/app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

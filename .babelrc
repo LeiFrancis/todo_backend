@@ -1,6 +1,6 @@
 // .babelrc
 {
     "presets": [
-        "env"
+       [ "env",{ "exclude": ["transform-es2015-classes"] }]
     ]
 }
